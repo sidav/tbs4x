@@ -24,6 +24,7 @@ func (s *scene) init() {
 			}
 		}
 	}
+	s.generateResources()
 
 	x, y := -1, -1
 	for !s.isTileApplicableForCity(x, y) {
@@ -34,4 +35,27 @@ func (s *scene) init() {
 		x:    x,
 		y:    y,
 	})
+}
+
+func (s *scene) generateResources() {
+	var desiredTotalRes = map[int]int{
+		RES_NONE:     0,
+		RES_GOLD:     1000,
+		RES_GREENIUM: 1000,
+	}
+	currTotalRes := make(map[int]int, 0)
+	for res := 1; res <= 2; res++ {
+		for currTotalRes[res] < desiredTotalRes[res] {
+			x, y := -1, -1
+			for !s.areCoordsValid(x, y) || s.tiles[x][y].resourceCode != RES_NONE ||
+				!s.tiles[x][y].getStaticData().canHaveResource(res) {
+
+				x, y = rnd.RandInRange(0, 64), rnd.RandInRange(0, 64)
+			}
+			s.tiles[x][y].resourceCode = res
+			resAmount := rnd.RandInRange(50, 150)
+			s.tiles[x][y].resourceAmountHere = resAmount
+			currTotalRes[res] += resAmount
+		}
+	}
 }

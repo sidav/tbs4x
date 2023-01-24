@@ -14,6 +14,9 @@ func (rs *asciiRenderer) renderUI() {
 }
 
 func (rs *asciiRenderer) renderUnderCursorInfo() {
+	//if rs.sc.tiles[rs.pc.cursorX][rs.pc.cursorY].resourceAmountHere > 0 {
+	//
+	//}
 	cityHere := rs.sc.getCityAt(rs.pc.cursorX, rs.pc.cursorY)
 	if cityHere != nil {
 		cw.SetFg(tcell.ColorWhite)

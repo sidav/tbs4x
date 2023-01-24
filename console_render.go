@@ -76,6 +76,17 @@ func (rs *asciiRenderer) renderTile(t *tile, sx, sy int) {
 			cw.PutChar(char, x, y)
 		}
 	}
+	if t.resourceAmountHere > 0 {
+		switch t.resourceCode {
+		case RES_GOLD:
+			cw.SetFg(tcell.ColorYellow)
+		case RES_GREENIUM:
+			cw.SetFg(tcell.ColorGreen)
+		}
+		for i := 0; i < rs.tileW*rs.tileH; i += 3 {
+			cw.PutChar('*', sx+((i+t.resourceAmountHere)%rs.tileW), sy+(i/rs.tileW))
+		}
+	}
 }
 
 func (rs *asciiRenderer) renderCity(c *city) {
