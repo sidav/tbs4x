@@ -29,6 +29,9 @@ func (rs *asciiRenderer) renderMainScreen(s *scene, pc *playerController) {
 			rs.renderTile(s.tiles[x][y], sx, sy)
 		}
 	}
+	for _, c := range s.cities {
+		rs.renderCity(c)
+	}
 	rs.renderCursor()
 	cw.FlushScreen()
 }
@@ -54,6 +57,22 @@ func (rs *asciiRenderer) renderTile(t *tile, sx, sy int) {
 			cw.PutChar(char, x, y)
 		}
 	}
+}
+
+func (rs *asciiRenderer) renderCity(c *city) {
+	sx, sy := rs.globalToOnScreen(c.x, c.y)
+	cityImage := []string{
+		"==^^",
+		"=&^=",
+		"====",
+	}
+	cw.SetFg(tcell.ColorWhite)
+	for x := 0; x < rs.tileW; x++ {
+		for y := 0; y < rs.tileH; y++ {
+			cw.PutChar(rune(cityImage[y][x]), sx+x, sy+y)
+		}
+	}
+	cw.PutStringCenteredAt(c.name, sx+rs.tileW/2, sy+rs.tileH)
 }
 
 func (rs *asciiRenderer) renderCursor() {

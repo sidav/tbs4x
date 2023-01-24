@@ -53,6 +53,16 @@ func (c *ConsoleWrapper) PutString(str string, x, y int) {
 	}
 }
 
+func (c *ConsoleWrapper) PutStringCenteredAt(str string, x, y int) {
+	for i := 0; i < len(str); i++ {
+		c.screen.SetCell(x-len(str)/2+i, y, c.style, rune(str[i]))
+	}
+}
+
+func (c *ConsoleWrapper) SetFg(fg tcell.Color) {
+	c.style = c.style.Foreground(fg)
+}
+
 func (c *ConsoleWrapper) SetStyle(fg, bg tcell.Color) {
 	c.style = c.style.Background(bg).Foreground(fg)
 }

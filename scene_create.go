@@ -24,4 +24,14 @@ func (s *scene) init() {
 			}
 		}
 	}
+
+	x, y := -1, -1
+	for !s.areCoordsValid(x, y) || s.tiles[x][y].code != TILE_GRASS {
+		x, y = rnd.RandInRange(0, 64), rnd.RandInRange(0, 64)
+	}
+	s.addCity(&city{
+		name: "Alpha Base",
+		x:    x,
+		y:    y,
+	})
 }

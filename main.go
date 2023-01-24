@@ -1,9 +1,9 @@
 package main
 
 import (
+	"tbs4x/lib/console/tcell_console_wrapper"
 	"tbs4x/lib/random"
 	"tbs4x/lib/random/pcgrandom"
-	"tbs4x/lib/tcell_console_wrapper"
 )
 
 var cw tcell_console_wrapper.ConsoleWrapper
@@ -24,7 +24,7 @@ func main() {
 	s := &scene{}
 	s.init()
 	rend := newAsciiRenderer()
-	pc := &playerController{}
+	pc := &playerController{cursorX: s.cities[0].x, cursorY: s.cities[0].y}
 
 	for GAME_RUNS {
 		rend.renderMainScreen(s, pc)
