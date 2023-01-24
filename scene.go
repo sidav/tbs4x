@@ -24,15 +24,17 @@ func (s *scene) getCityAt(x, y int) *city {
 
 func (s *scene) isTileApplicableForCity(x, y int) bool {
 	const rang = 2
-	for i := x - rang; i <= x+rang; i++ {
-		for j := y - rang; j <= y+rang; j++ {
-			if !s.areCoordsValid(i, j) {
-				return false
-			}
-			if s.tiles[i][j].code != TILE_GRASS {
-				return false
+	return s.countTilesAllowingBuildingAround(x, y, rang) >= (2*rang+1)*(2*rang+1)
+}
+
+func (s *scene) countTilesAllowingBuildingAround(x, y, dist int) int {
+	count := 0
+	for i := x - dist; i <= x+dist; i++ {
+		for j := y - dist; j <= y+dist; j++ {
+			if s.areCoordsValid(i, j) && s.tiles[i][j].allowsBuilding() {
+				count++
 			}
 		}
 	}
-	return true
+	return count
 }

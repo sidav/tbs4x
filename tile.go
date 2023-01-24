@@ -10,6 +10,10 @@ func (t *tile) getStaticData() *tileStaticData {
 	return sTableTiles[t.code]
 }
 
+func (t *tile) allowsBuilding() bool {
+	return t.resourceAmountHere == 0 && t.getStaticData().allowsBuilding
+}
+
 const (
 	RES_NONE = iota
 	RES_GOLD
@@ -25,6 +29,7 @@ const (
 
 type tileStaticData struct {
 	possibleResources []int
+	allowsBuilding    bool
 }
 
 func (tsd *tileStaticData) canHaveResource(code int) bool {
@@ -39,8 +44,16 @@ func (tsd *tileStaticData) canHaveResource(code int) bool {
 var sTableTiles = map[int]*tileStaticData{
 	TILE_SAND: {
 		possibleResources: []int{RES_GREENIUM},
+		allowsBuilding:    false,
 	},
-	TILE_MOUNTAIN: {},
-	TILE_WATER:    {},
-	TILE_GRASS:    {possibleResources: []int{RES_GOLD}},
+	TILE_MOUNTAIN: {
+		allowsBuilding: false,
+	},
+	TILE_WATER: {
+		allowsBuilding: false,
+	},
+	TILE_GRASS: {
+		possibleResources: []int{RES_GOLD},
+		allowsBuilding:    true,
+	},
 }

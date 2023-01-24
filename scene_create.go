@@ -15,7 +15,7 @@ func (s *scene) init() {
 			switch {
 			case noiseMap[x][y] < 0.5:
 				s.tiles[x][y] = &tile{code: TILE_WATER}
-			case noiseMap[x][y] < 0.55:
+			case noiseMap[x][y] < 0.575:
 				s.tiles[x][y] = &tile{code: TILE_SAND}
 			case noiseMap[x][y] < 0.90:
 				s.tiles[x][y] = &tile{code: TILE_GRASS}
@@ -31,9 +31,10 @@ func (s *scene) init() {
 		x, y = rnd.RandInRange(0, 64), rnd.RandInRange(0, 64)
 	}
 	s.addCity(&city{
-		name: "Alpha Base",
-		x:    x,
-		y:    y,
+		name:         "Alpha Base",
+		x:            x,
+		y:            y,
+		maxBuildings: s.countTilesAllowingBuildingAround(x, y, 2),
 	})
 }
 

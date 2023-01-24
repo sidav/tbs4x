@@ -14,13 +14,15 @@ func (rs *asciiRenderer) renderUI() {
 }
 
 func (rs *asciiRenderer) renderUnderCursorInfo() {
-	//if rs.sc.tiles[rs.pc.cursorX][rs.pc.cursorY].resourceAmountHere > 0 {
-	//
-	//}
+	if rs.sc.tiles[rs.pc.cursorX][rs.pc.cursorY].resourceAmountHere > 0 {
+		cw.SetFg(tcell.ColorYellow)
+		rs.drawCenteredStringAndIncrementLine(fmt.Sprintf("Resources: %d", rs.sc.tiles[rs.pc.cursorX][rs.pc.cursorY].resourceAmountHere), rs.uiPanelCenterX)
+	}
 	cityHere := rs.sc.getCityAt(rs.pc.cursorX, rs.pc.cursorY)
 	if cityHere != nil {
 		cw.SetFg(tcell.ColorWhite)
 		rs.drawCenteredStringAndIncrementLine(cityHere.name, rs.uiPanelCenterX)
+		rs.drawCenteredStringAndIncrementLine(fmt.Sprintf(" Size: %d", cityHere.maxBuildings), rs.uiPanelCenterX)
 	}
 }
 
