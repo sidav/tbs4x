@@ -26,7 +26,7 @@ func (s *scene) init() {
 	}
 
 	x, y := -1, -1
-	for !s.areCoordsValid(x, y) || s.tiles[x][y].code != TILE_GRASS {
+	for !s.isTileApplicableForCity(x, y) {
 		x, y = rnd.RandInRange(0, 64), rnd.RandInRange(0, 64)
 	}
 	s.addCity(&city{

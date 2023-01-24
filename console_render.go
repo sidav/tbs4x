@@ -3,9 +3,17 @@ package main
 import "github.com/gdamore/tcell/v2"
 
 type asciiRenderer struct {
-	camX, camY   int
+	consW, consH int
 	tileW, tileH int
-	pc           *playerController
+
+	camX, camY int
+
+	uiPanelW       int
+	uiPanelCenterX int
+	currUiLine     int
+
+	pc *playerController
+	sc *scene
 }
 
 func newAsciiRenderer() *asciiRenderer {
@@ -17,22 +25,33 @@ func newAsciiRenderer() *asciiRenderer {
 	}
 }
 
-func (rs *asciiRenderer) renderMainScreen(s *scene, pc *playerController) {
+func (rs *asciiRenderer) updateVars(s *scene, pc *playerController) {
+	rs.sc = s
 	rs.pc = pc
+	rs.currUiLine = 0
 	cw.ClearScreen()
-	consW, consH := cw.GetConsoleSize()
-	rs.camX = pc.cursorX - (consW/rs.tileW)/2
-	rs.camY = pc.cursorY - (consH/rs.tileH)/2
+	rs.consW, rs.consH = cw.GetConsoleSize()
+	rs.uiPanelCenterX = rs.consW - rs.uiPanelW/2
+	rs.uiPanelW = rs.consW / 4
+	rs.camX = pc.cursorX - ((rs.consW-rs.uiPanelW)/rs.tileW)/2
+	rs.camY = pc.cursorY - (rs.consH/rs.tileH)/2
+}
+
+func (rs *asciiRenderer) renderMainScreen(s *scene, pc *playerController) {
+	rs.updateVars(s, pc)
+
 	for x := range s.tiles {
 		for y := range s.tiles[x] {
-			sx, sy := rs.globalToOnScreen(x, y)
-			rs.renderTile(s.tiles[x][y], sx, sy)
+			if rs.areGlobalCoordsOnScreen(x, y) {
+				sx, sy := rs.globalToOnScreen(x, y)
+				rs.renderTile(s.tiles[x][y], sx, sy)
+			}
 		}
 	}
 	for _, c := range s.cities {
 		rs.renderCity(c)
 	}
-	rs.renderCursor()
+	rs.renderUI()
 	cw.FlushScreen()
 }
 
@@ -60,11 +79,14 @@ func (rs *asciiRenderer) renderTile(t *tile, sx, sy int) {
 }
 
 func (rs *asciiRenderer) renderCity(c *city) {
+	if !rs.areGlobalCoordsOnScreen(c.x, c.y) {
+		return
+	}
 	sx, sy := rs.globalToOnScreen(c.x, c.y)
 	cityImage := []string{
-		"==^^",
-		"=&^=",
-		"====",
+		"/=^\\",
+		"=&|=",
+		"\\==/",
 	}
 	cw.SetFg(tcell.ColorWhite)
 	for x := 0; x < rs.tileW; x++ {
@@ -75,18 +97,9 @@ func (rs *asciiRenderer) renderCity(c *city) {
 	cw.PutStringCenteredAt(c.name, sx+rs.tileW/2, sy+rs.tileH)
 }
 
-func (rs *asciiRenderer) renderCursor() {
-	sx, sy := rs.globalToOnScreen(rs.pc.cursorX, rs.pc.cursorY)
-	cw.SetStyle(tcell.ColorDarkRed, tcell.ColorBlack)
-	cw.PutChar('|', sx-1, sy)
-	cw.PutChar('|', sx+rs.tileW, sy)
-	cw.PutChar('|', sx-1, sy+rs.tileH-1)
-	cw.PutChar('|', sx+rs.tileW, sy+rs.tileH-1)
-
-	cw.PutChar('-', sx, sy-1)
-	cw.PutChar('-', sx+rs.tileW-1, sy-1)
-	cw.PutChar('-', sx, sy+rs.tileH)
-	cw.PutChar('-', sx+rs.tileW-1, sy+rs.tileH)
+func (rs *asciiRenderer) areGlobalCoordsOnScreen(gx, gy int) bool {
+	return gx-rs.camX < (rs.consW-rs.uiPanelW)/rs.tileW &&
+		gy-rs.camY <= rs.consH/rs.tileH
 }
 
 func (rs *asciiRenderer) globalToOnScreen(gx, gy int) (int, int) {
