@@ -1,7 +1,6 @@
 package perlin_noise
 
 import (
-	"fmt"
 	"math"
 	"tbs4x/lib/random"
 )
@@ -65,11 +64,10 @@ func noise2d(x, y float64) float64 {
 	return linearInterpolation(u, linearInterpolation(v, dotBL, dotTL), linearInterpolation(v, dotBR, dotTR))
 }
 
-func GeneratePerlinNoiseMap(w, h int, FBMIterations int, scale float64, rnd random.PRNG) [][]float64 {
+func GeneratePerlinNoiseMap(w, h, noiseTileSize, FBMIterations int, rnd random.PRNG) [][]float64 {
 	permTableSize := 10 // int(float64(w*h) * scale * scale)
 	permTable.init(permTableSize, rnd)
-	min := 0.0
-	max := 0.0
+	scale := 1 / float64(noiseTileSize)
 	noiseMap := make([][]float64, w)
 	for x := 0; x < w; x++ {
 		noiseMap[x] = make([]float64, h)
@@ -86,19 +84,9 @@ func GeneratePerlinNoiseMap(w, h int, FBMIterations int, scale float64, rnd rand
 			} else {
 				noise = noise2d(float64(x)*scale, float64(y)*scale)
 			}
-			//noise += 1
-			//noise /= 2
-			// fmt.Printf("%.3f;  ", noise)
 			noiseMap[x][y] = noise
-			if min > noise {
-				min = noise
-			}
-			if max < noise {
-				max = noise
-			}
 		}
 	}
-	fmt.Printf("min %.2f, max %.2f\n", min, max)
 	// normalize result
 	normalizeNoiseArray(noiseMap)
 	return noiseMap

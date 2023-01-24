@@ -10,7 +10,8 @@ func (t *tile) getStaticData() *tileStaticData {
 
 const (
 	TILE_SAND = iota
-	TILE_ROCK
+	TILE_GRASS
+	TILE_MOUNTAIN
 	TILE_WATER
 )
 
@@ -18,7 +19,7 @@ type tileStaticData struct {
 }
 
 var sTableTiles = map[int]*tileStaticData{
-	TILE_SAND:  {},
-	TILE_ROCK:  {},
-	TILE_WATER: {},
+	TILE_SAND:     {},
+	TILE_MOUNTAIN: {},
+	TILE_WATER:    {},
 }

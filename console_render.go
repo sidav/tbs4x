@@ -39,9 +39,12 @@ func (rs *asciiRenderer) renderTile(t *tile, sx, sy int) {
 	case TILE_WATER:
 		cw.SetStyle(tcell.ColorBlue, tcell.ColorBlack)
 		char = '~'
-	case TILE_ROCK:
+	case TILE_MOUNTAIN:
 		cw.SetStyle(tcell.ColorDarkRed, tcell.ColorBlack)
 		char = '^'
+	case TILE_GRASS:
+		cw.SetStyle(tcell.ColorDarkGreen, tcell.ColorBlack)
+		char = '.'
 	case TILE_SAND:
 		cw.SetStyle(tcell.ColorYellow, tcell.ColorBlack)
 		char = '.'
