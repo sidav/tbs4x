@@ -1,6 +1,9 @@
 package strings
 
-import "strings"
+import (
+	"regexp"
+	"strings"
+)
 
 func CenterStringWithSpaces(str string, desiredLength int) string {
 	padAmount := desiredLength - len(str)
@@ -13,4 +16,12 @@ func CenterStringWithSpaces(str string, desiredLength int) string {
 		padLeft++
 	}
 	return strings.Repeat(" ", padLeft) + str + strings.Repeat(" ", padRight)
+}
+
+func DewovelAndTrimString(s string, trimLength int) string {
+	s = regexp.MustCompile("[AEIOUY ]|[aeiouy]").ReplaceAllString(s, "")
+	if trimLength > 0 && len(s) > trimLength {
+		s = s[:trimLength]
+	}
+	return s
 }

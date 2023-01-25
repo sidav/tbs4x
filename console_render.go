@@ -1,6 +1,10 @@
 package main
 
-import "github.com/gdamore/tcell/v2"
+import (
+	"github.com/gdamore/tcell/v2"
+	"strings"
+	strings2 "tbs4x/lib/strings"
+)
 
 type asciiRenderer struct {
 	consW, consH int
@@ -50,6 +54,9 @@ func (rs *asciiRenderer) renderMainScreen(s *scene, pc *playerController) {
 	}
 	for _, c := range s.cities {
 		rs.renderCity(c)
+	}
+	for _, u := range s.units {
+		rs.renderUnit(u)
 	}
 	rs.renderUI()
 	cw.FlushScreen()
@@ -106,6 +113,16 @@ func (rs *asciiRenderer) renderCity(c *city) {
 		}
 	}
 	cw.PutStringCenteredAt(c.name, sx+rs.tileW/2, sy+rs.tileH)
+}
+
+func (rs *asciiRenderer) renderUnit(u *unit) {
+	if !rs.areGlobalCoordsOnScreen(u.x, u.y) {
+		return
+	}
+	sx, sy := rs.globalToOnScreen(u.x, u.y)
+	cw.SetFg(tcell.ColorWhite)
+	cw.PutString("@", sx+rs.tileW/2, sy+1)
+	cw.PutString(strings.ToUpper(strings2.DewovelAndTrimString(u.getStaticData().name, rs.tileW)), sx, sy+rs.tileH-1)
 }
 
 func (rs *asciiRenderer) areGlobalCoordsOnScreen(gx, gy int) bool {

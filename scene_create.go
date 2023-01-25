@@ -36,6 +36,11 @@ func (s *scene) init() {
 		y:            y,
 		maxBuildings: s.countTilesAllowingBuildingAround(x, y, 2),
 	})
+	s.addUnit(&unit{
+		code: UNT_RECON,
+		x:    x,
+		y:    y + 1,
+	})
 }
 
 func (s *scene) generateResources() {

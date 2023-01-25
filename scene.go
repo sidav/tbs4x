@@ -2,11 +2,26 @@ package main
 
 type scene struct {
 	cities []*city
+	units  []*unit
 	tiles  [][]*tile
 }
 
 func (s *scene) areCoordsValid(x, y int) bool {
 	return x > 0 && x < len(s.tiles) && y > 0 && y < len(s.tiles[x])
+}
+
+func (s *scene) addUnit(u *unit) {
+	s.units = append(s.units, u)
+}
+
+func (s *scene) getAllUnitsAt(x, y int) []*unit {
+	list := make([]*unit, 0)
+	for _, u := range s.units {
+		if u.x == x && u.y == y {
+			list = append(list, u)
+		}
+	}
+	return list
 }
 
 func (s *scene) addCity(c *city) {

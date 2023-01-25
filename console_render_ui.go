@@ -18,11 +18,21 @@ func (rs *asciiRenderer) renderUnderCursorInfo() {
 		cw.SetFg(tcell.ColorYellow)
 		rs.drawCenteredStringAndIncrementLine(fmt.Sprintf("Resources: %d", rs.sc.tiles[rs.pc.cursorX][rs.pc.cursorY].resourceAmountHere), rs.uiPanelCenterX)
 	}
+
 	cityHere := rs.sc.getCityAt(rs.pc.cursorX, rs.pc.cursorY)
 	if cityHere != nil {
 		cw.SetFg(tcell.ColorWhite)
 		rs.drawCenteredStringAndIncrementLine(cityHere.name, rs.uiPanelCenterX)
 		rs.drawCenteredStringAndIncrementLine(fmt.Sprintf(" Size: %d", cityHere.maxBuildings), rs.uiPanelCenterX)
+	}
+	rs.currUiLine++
+
+	unitsHere := rs.sc.getAllUnitsAt(rs.pc.cursorX, rs.pc.cursorY)
+	for i, u := range unitsHere {
+		cw.SetFg(tcell.ColorWhite)
+		rs.drawCenteredStringAndIncrementLine(fmt.Sprintf("%d. %s", i+1, u.getStaticData().name),
+			rs.uiPanelCenterX)
+
 	}
 }
 
