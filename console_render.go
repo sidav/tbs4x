@@ -48,7 +48,7 @@ func (rs *asciiRenderer) renderMainScreen(s *scene, pc *playerController) {
 		for y := range s.tiles[x] {
 			if rs.areGlobalCoordsOnScreen(x, y) {
 				sx, sy := rs.globalToOnScreen(x, y)
-				rs.renderTile(s.tiles[x][y], sx, sy)
+				rs.renderTile(s.tiles[x][y], sx, sy, rs.pc.controlsPlayer.exploredTiles[x][y])
 			}
 		}
 	}
@@ -62,7 +62,7 @@ func (rs *asciiRenderer) renderMainScreen(s *scene, pc *playerController) {
 	cw.FlushScreen()
 }
 
-func (rs *asciiRenderer) renderTile(t *tile, sx, sy int) {
+func (rs *asciiRenderer) renderTile(t *tile, sx, sy int, explored bool) {
 	char := '?'
 	switch t.code {
 	case TILE_WATER:
@@ -78,12 +78,16 @@ func (rs *asciiRenderer) renderTile(t *tile, sx, sy int) {
 		cw.SetStyle(tcell.ColorYellow, tcell.ColorBlack)
 		char = '.'
 	}
+	if !explored {
+		cw.SetStyle(tcell.ColorBlack, tcell.ColorBlack)
+		char = ' '
+	}
 	for x := sx; x < sx+rs.tileW; x++ {
 		for y := sy; y < sy+rs.tileH; y++ {
 			cw.PutChar(char, x, y)
 		}
 	}
-	if t.resourceAmountHere > 0 {
+	if explored && t.resourceAmountHere > 0 {
 		switch t.resourceCode {
 		case RES_GOLD:
 			cw.SetFg(tcell.ColorYellow)

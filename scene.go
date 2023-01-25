@@ -1,13 +1,31 @@
 package main
 
 type scene struct {
-	cities []*city
-	units  []*unit
-	tiles  [][]*tile
+	players []*player
+	cities  []*city
+	units   []*unit
+	tiles   [][]*tile
 }
 
 func (s *scene) areCoordsValid(x, y int) bool {
 	return x > 0 && x < len(s.tiles) && y > 0 && y < len(s.tiles[x])
+}
+
+func (s *scene) getSize() (int, int) {
+	return len(s.tiles), len(s.tiles[0])
+}
+
+func (s *scene) getRandomCoords() (int, int) {
+	return rnd.Rand(len(s.tiles)), rnd.Rand(len(s.tiles[0]))
+}
+
+func (s *scene) performExploration() {
+	for _, c := range s.cities {
+		c.owner.exploreAround(s, c.x, c.y, 2)
+	}
+	for _, u := range s.units {
+		u.owner.exploreAround(s, u.x, u.y, u.getStaticData().geoscapeStats.vision)
+	}
 }
 
 func (s *scene) addUnit(u *unit) {

@@ -1,8 +1,9 @@
 package main
 
 type unit struct {
-	code int
-	x, y int
+	owner *player
+	code  int
+	x, y  int
 }
 
 func (u *unit) getStaticData() *unitStaticData {

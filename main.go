@@ -22,12 +22,13 @@ func main() {
 	defer cw.Close()
 
 	s := &scene{}
-	s.init()
+	s.init(32, 32)
+	s.performExploration()
 	rend := newAsciiRenderer()
-	pc := &playerController{cursorX: s.cities[0].x, cursorY: s.cities[0].y}
+	pc := &playerController{controlsPlayer: s.players[0], cursorX: s.cities[0].x, cursorY: s.cities[0].y}
 
 	for GAME_RUNS {
 		rend.renderMainScreen(s, pc)
-		pc.playerControl()
+		pc.playerControl(s)
 	}
 }

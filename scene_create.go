@@ -2,9 +2,9 @@ package main
 
 import "tbs4x/lib/perlin_noise"
 
-func (s *scene) init() {
+func (s *scene) init(w, h int) {
 	// Perlin noise generation
-	noiseMap := perlin_noise.GeneratePerlinNoiseMap(64, 64, 20, 8, rnd)
+	noiseMap := perlin_noise.GeneratePerlinNoiseMap(w, h, 16, 8, rnd)
 	perlin_noise.MakeNoiseRectangular(noiseMap)
 	s.tiles = make([][]*tile, len(noiseMap))
 	for i := range s.tiles {
@@ -26,21 +26,35 @@ func (s *scene) init() {
 	}
 	s.generateResources()
 
+	s.addPlayer()
+}
+
+func (s *scene) addPlayer() {
+	newPlayer := &player{}
+	newPlayer.init(s.getSize())
 	x, y := -1, -1
+	try := 0
 	for !s.isTileApplicableForCity(x, y) {
-		x, y = rnd.RandInRange(0, 64), rnd.RandInRange(0, 64)
+		x, y = s.getRandomCoords()
+		try++
+		if try > 10000 {
+			panic("Can't place player city")
+		}
 	}
 	s.addCity(&city{
+		owner:        newPlayer,
 		name:         "Alpha Base",
 		x:            x,
 		y:            y,
 		maxBuildings: s.countTilesAllowingBuildingAround(x, y, 2),
 	})
 	s.addUnit(&unit{
-		code: UNT_RECON,
-		x:    x,
-		y:    y + 1,
+		owner: newPlayer,
+		code:  UNT_RECON,
+		x:     x,
+		y:     y + 1,
 	})
+	s.players = append(s.players, newPlayer)
 }
 
 func (s *scene) generateResources() {
@@ -53,10 +67,15 @@ func (s *scene) generateResources() {
 	for res := 1; res <= 2; res++ {
 		for currTotalRes[res] < desiredTotalRes[res] {
 			x, y := -1, -1
+			try := 0
 			for !s.areCoordsValid(x, y) || s.tiles[x][y].resourceCode != RES_NONE ||
 				!s.tiles[x][y].getStaticData().canHaveResource(res) {
 
-				x, y = rnd.RandInRange(0, 64), rnd.RandInRange(0, 64)
+				x, y = s.getRandomCoords()
+				try++
+				if try > 10000 {
+					panic("Can't place resource")
+				}
 			}
 			s.tiles[x][y].resourceCode = res
 			resAmount := rnd.RandInRange(50, 150)
