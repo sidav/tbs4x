@@ -25,7 +25,8 @@ func main() {
 	s.init(32, 32)
 	s.performExploration()
 	rend := newAsciiRenderer()
-	pc := &playerController{controlsPlayer: s.players[0], cursorX: s.cities[0].x, cursorY: s.cities[0].y}
+	pc := &playerController{controlsPlayer: s.players[0]}
+	pc.setCursorAt(s.cities[0].x, s.cities[0].y)
 
 	for GAME_RUNS {
 		rend.renderMainScreen(s, pc)
