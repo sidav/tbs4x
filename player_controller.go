@@ -47,8 +47,14 @@ func (pc *playerController) normalMode() {
 func (pc *playerController) unitsSelectedMode() {
 	key := cw.ReadKeyAsync(10)
 	switch key {
-	case "ESCAPE":
+	case "ESCAPE", "ENTER":
 		pc.currMode = PCMODE_NORMAL
+	}
+	vx, vy := pc.keyToDirection(key)
+	if vx != 0 || vy != 0 {
+		if pc.s.tryImmediateMoveUnits(pc.selectedUnits, vx, vy) {
+			pc.setCursorAt(pc.selectedUnits[0].getCoords())
+		}
 	}
 }
 
