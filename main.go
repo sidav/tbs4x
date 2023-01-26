@@ -10,6 +10,7 @@ var cw tcell_console_wrapper.ConsoleWrapper
 var rnd random.PRNG
 
 var GAME_RUNS = true
+var rend *asciiRenderer
 
 func main() {
 	rnd = pcgrandom.New(-1)
@@ -21,15 +22,22 @@ func main() {
 	cw.Init()
 	defer cw.Close()
 
+	gameLoop()
+}
+
+func gameLoop() {
 	s := &scene{}
 	s.init(32, 32)
 	s.performExploration()
-	rend := newAsciiRenderer()
+	rend = newAsciiRenderer()
 	pc := &playerController{controlsPlayer: s.players[0]}
 	pc.setCursorAt(s.cities[0].x, s.cities[0].y)
-
 	for GAME_RUNS {
-		rend.renderMainScreen(s, pc)
-		pc.playerControl(s)
+		for _, currPlayer := range s.players {
+			for !currPlayer.endedThisTurn && GAME_RUNS {
+				rend.renderMainScreen(s, pc)
+				pc.playerControl(s)
+			}
+		}
 	}
 }

@@ -34,7 +34,7 @@ func (pc *playerController) normalMode() {
 		pc.cursorX, pc.cursorY = pc.s.cities[0].x, pc.s.cities[0].y
 	case "ENTER":
 		unitsAtCursor := pc.s.getAllUnitsAt(pc.cursorX, pc.cursorY)
-		if unitsAtCursor != nil {
+		if len(unitsAtCursor) > 0 {
 			pc.selectedUnits = unitsAtCursor
 			pc.currMode = PCMODE_UNITS_SELECTED
 		}

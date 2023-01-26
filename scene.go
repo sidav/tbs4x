@@ -8,7 +8,7 @@ type scene struct {
 }
 
 func (s *scene) areCoordsValid(x, y int) bool {
-	return x > 0 && x < len(s.tiles) && y > 0 && y < len(s.tiles[x])
+	return x >= 0 && x < len(s.tiles) && y >= 0 && y < len(s.tiles[x])
 }
 
 func (s *scene) getSize() (int, int) {

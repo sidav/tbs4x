@@ -1,6 +1,7 @@
 package main
 
 type player struct {
+	endedThisTurn bool
 	exploredTiles [][]bool
 	seenTiles     [][]bool
 }

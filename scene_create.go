@@ -48,12 +48,14 @@ func (s *scene) addPlayer() {
 		y:            y,
 		maxBuildings: s.countTilesAllowingBuildingAround(x, y, 2),
 	})
-	s.addUnit(&unit{
+	startUnit := &unit{
 		owner: newPlayer,
 		code:  UNT_RECON,
 		x:     x,
 		y:     y + 1,
-	})
+	}
+	startUnit.initByStatic()
+	s.addUnit(startUnit)
 	s.players = append(s.players, newPlayer)
 }
 

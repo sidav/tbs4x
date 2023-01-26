@@ -1,10 +1,11 @@
 package main
 
-func (s *scene) tryImmediateMoveUnits(unts []*unit, vx, vy int) bool {
-	for _, u := range unts {
-		u.x += vx
-		u.y += vy
+func (s *scene) tryImmediateMoveUnits(unts arrayOfUnits, vx, vy int) bool {
+	if unts.getMinMovementPoints() > 0 {
+		unts.moveAllByVector(vx, vy)
+		s.performExploration()
+		unts.spendMovementPoints(1)
+		return true
 	}
-	s.performExploration()
-	return true
+	return false
 }
