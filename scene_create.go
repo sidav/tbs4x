@@ -41,13 +41,15 @@ func (s *scene) addPlayer() {
 			panic("Can't place player city")
 		}
 	}
-	s.addCity(&city{
+	startCity := &city{
 		owner:        newPlayer,
 		name:         "Alpha Base",
 		x:            x,
 		y:            y,
 		maxBuildings: s.countTilesAllowingBuildingAround(x, y, 2),
-	})
+	}
+	startCity.addBuilding(findBuildingInTableByName("hq"))
+	s.addCity(startCity)
 	startUnit := &unit{
 		owner: newPlayer,
 		code:  UNT_RECON,

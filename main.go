@@ -36,6 +36,7 @@ func gameLoop() {
 	s.performExploration()
 	rend = newAsciiRenderer()
 	pc := &playerController{controlsPlayer: s.players[0]}
+	pc.resetMode()
 	pc.setCursorAt(s.cities[0].x, s.cities[0].y)
 	for GAME_RUNS {
 		for _, currPlayer := range s.players {

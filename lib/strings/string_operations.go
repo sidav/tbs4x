@@ -5,6 +5,12 @@ import (
 	"strings"
 )
 
+func StringsAreRoughlyEqual(s1, s2 string) bool {
+	s1Modded := strings.Replace(strings.ToLower(s1), " ", "", -1)
+	s2Modded := strings.Replace(strings.ToLower(s2), " ", "", -1)
+	return strings.Contains(s1Modded, s2Modded) || strings.Contains(s2Modded, s1Modded)
+}
+
 func CenterStringWithSpaces(str string, desiredLength int) string {
 	padAmount := desiredLength - len(str)
 	if padAmount < 1 {

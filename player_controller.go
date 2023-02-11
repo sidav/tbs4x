@@ -2,16 +2,26 @@ package main
 
 type playerController struct {
 	s                *scene
-	currMode         int
+	currMode         string
 	controlsPlayer   *player
 	cursorX, cursorY int
 
 	selectedUnits []*unit
+	selectedCity  *city
+}
+
+func (pc *playerController) getCursorCoords() (int, int) {
+	return pc.cursorX, pc.cursorY
+}
+
+func (pc *playerController) resetMode() {
+	pc.currMode = PCMODE_NORMAL
 }
 
 const (
-	PCMODE_NORMAL = iota
-	PCMODE_UNITS_SELECTED
+	PCMODE_NORMAL         = "Normal"
+	PCMODE_UNITS_SELECTED = "Unit selected"
+	PCMODE_CITY_SELECTED  = "City selected"
 )
 
 func (pc *playerController) playerControl(s *scene) {
@@ -21,6 +31,10 @@ func (pc *playerController) playerControl(s *scene) {
 		pc.normalMode()
 	case PCMODE_UNITS_SELECTED:
 		pc.unitsSelectedMode()
+	case PCMODE_CITY_SELECTED:
+		pc.citySelectedMode()
+	default:
+		panic("No func for mode " + pc.currMode)
 	}
 	pc.normalizeCursor()
 }
@@ -35,7 +49,13 @@ func (pc *playerController) normalMode() {
 	case "TAB":
 		pc.cursorX, pc.cursorY = pc.s.cities[0].x, pc.s.cities[0].y
 	case "ENTER":
-		unitsAtCursor := pc.s.getAllUnitsAt(pc.cursorX, pc.cursorY)
+		cityAtCursor := pc.s.getCityAt(pc.getCursorCoords())
+		if cityAtCursor != nil {
+			pc.selectedCity = cityAtCursor
+			pc.currMode = PCMODE_CITY_SELECTED
+			return
+		}
+		unitsAtCursor := pc.s.getAllUnitsAt(pc.getCursorCoords())
 		if len(unitsAtCursor) > 0 {
 			pc.selectedUnits = unitsAtCursor
 			pc.currMode = PCMODE_UNITS_SELECTED
@@ -50,13 +70,20 @@ func (pc *playerController) unitsSelectedMode() {
 	key := cw.ReadKeyAsync(10)
 	switch key {
 	case "ESCAPE", "ENTER":
-		pc.currMode = PCMODE_NORMAL
+		pc.resetMode()
 	}
 	vx, vy := pc.keyToDirection(key)
 	if vx != 0 || vy != 0 {
 		if pc.s.tryImmediateMoveUnits(pc.selectedUnits, vx, vy) {
 			pc.setCursorAt(pc.selectedUnits[0].getCoords())
 		}
+	}
+}
+
+func (pc *playerController) citySelectedMode() {
+	key := cw.ReadKey()
+	if key == "ESCAPE" || key == "ENTER" {
+		pc.resetMode()
 	}
 }
 
