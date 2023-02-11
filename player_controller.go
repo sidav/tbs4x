@@ -30,6 +30,8 @@ func (pc *playerController) normalMode() {
 	switch key {
 	case "ESCAPE":
 		GAME_RUNS = false
+	case "BACKSPACE":
+		pc.controlsPlayer.endedThisTurn = true
 	case "TAB":
 		pc.cursorX, pc.cursorY = pc.s.cities[0].x, pc.s.cities[0].y
 	case "ENTER":

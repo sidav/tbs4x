@@ -20,7 +20,12 @@ func main() {
 	//return
 
 	cw.Init()
-	defer cw.Close()
+	defer func() {
+		cw.Close()
+		if x := recover(); x != nil {
+			panic(x)
+		}
+	}()
 
 	gameLoop()
 }
@@ -34,10 +39,19 @@ func gameLoop() {
 	pc.setCursorAt(s.cities[0].x, s.cities[0].y)
 	for GAME_RUNS {
 		for _, currPlayer := range s.players {
+			// beginning of turn cleanup
+			currPlayer.endedThisTurn = false
+			for i := range s.units {
+				if s.units[i].owner == currPlayer {
+					s.units[i].movementPointsRemaining = s.units[i].getStaticData().geoscapeStats.speed
+				}
+			}
+
 			for !currPlayer.endedThisTurn && GAME_RUNS {
 				rend.renderMainScreen(s, pc)
 				pc.playerControl(s)
 			}
 		}
+
 	}
 }
