@@ -52,7 +52,7 @@ func (s *scene) addPlayer() {
 	s.addCity(startCity)
 	startUnit := &unit{
 		owner: newPlayer,
-		code:  UNT_RECON,
+		id:    findUnitStaticIndexByName("recon"),
 		x:     x,
 		y:     y + 1,
 	}

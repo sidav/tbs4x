@@ -1,5 +1,7 @@
 package main
 
+import strings2 "tbs4x/lib/strings"
+
 type unitStaticData struct {
 	name            string
 	figuresInUnit   int
@@ -9,16 +11,31 @@ type unitStaticData struct {
 }
 
 type unitStaticGeoscapeStats struct {
-	speed  int
-	vision int
+	speed          int
+	vision         int
+	productionCost int
+	moneyCost      int
 }
 
-const (
-	UNT_RECON = iota
-)
+func (u *unitStaticData) getCosts() (int, int) {
+	return u.geoscapeStats.productionCost, u.geoscapeStats.moneyCost
+}
 
-var sTableUnits = map[int]*unitStaticData{
-	UNT_RECON: {
+func findUnitStaticIndexByName(name string) int {
+	index := -1
+	for id, u := range sTableUnits {
+		if strings2.StringsAreRoughlyEqual(name, u.name) {
+			if index >= 0 {
+				panic("Unit search: " + name + ": many occurrences found")
+			}
+			index = id
+		}
+	}
+	return index
+}
+
+var sTableUnits = []*unitStaticData{
+	{
 		name:            "Recon squad",
 		figuresInUnit:   2,
 		healthPerFigure: 2,

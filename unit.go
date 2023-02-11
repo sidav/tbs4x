@@ -2,7 +2,7 @@ package main
 
 type unit struct {
 	owner                   *player
-	code                    int
+	id                      int
 	x, y                    int
 	movementPointsRemaining int
 }
@@ -16,5 +16,5 @@ func (u *unit) getCoords() (int, int) {
 }
 
 func (u *unit) getStaticData() *unitStaticData {
-	return sTableUnits[u.code]
+	return sTableUnits[u.id]
 }
