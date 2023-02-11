@@ -1,10 +1,11 @@
 package main
 
 type scene struct {
-	players []*player
-	cities  []*city
-	units   []*unit
-	tiles   [][]*tile
+	currentTurn int
+	players     []*player
+	cities      []*city
+	units       []*unit
+	tiles       [][]*tile
 }
 
 func (s *scene) areCoordsValid(x, y int) bool {

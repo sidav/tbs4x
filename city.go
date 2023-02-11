@@ -6,6 +6,9 @@ type city struct {
 	x, y          int
 	maxBuildings  int
 	buildingsHere []*cityBuildingStatic
+
+	currentProductionOrder       producible
+	currentAccumulatedProduction int
 }
 
 func (c *city) addBuilding(s *cityBuildingStatic) {
@@ -18,4 +21,15 @@ func (c *city) countUsedSpace() int {
 		space += b.size
 	}
 	return space
+}
+
+func (c *city) getListOfBuildablesHere() []*cityBuildingStatic {
+	arr := make([]*cityBuildingStatic, 0)
+	for _, b := range sTableBuildings {
+		if b.unbuildable {
+			continue
+		}
+		arr = append(arr, b)
+	}
+	return arr
 }

@@ -1,5 +1,7 @@
 package main
 
+import "tbs4x/lib/strings"
+
 type playerController struct {
 	s                *scene
 	currMode         string
@@ -19,9 +21,11 @@ func (pc *playerController) resetMode() {
 }
 
 const (
-	PCMODE_NORMAL         = "Normal"
-	PCMODE_UNITS_SELECTED = "Unit selected"
-	PCMODE_CITY_SELECTED  = "City selected"
+	PCMODE_NORMAL            = "Normal"
+	PCMODE_UNITS_SELECTED    = "Unit selected"
+	PCMODE_CITY_SELECTED     = "City selected"
+	PCMODE_SELECTING_BLDPROD = "Building"
+	PCMODE_SELECTING_UNTPROD = "Producing"
 )
 
 func (pc *playerController) playerControl(s *scene) {
@@ -33,6 +37,8 @@ func (pc *playerController) playerControl(s *scene) {
 		pc.unitsSelectedMode()
 	case PCMODE_CITY_SELECTED:
 		pc.citySelectedMode()
+	case PCMODE_SELECTING_BLDPROD:
+		pc.selectCityBuilding()
 	default:
 		panic("No func for mode " + pc.currMode)
 	}
@@ -84,6 +90,26 @@ func (pc *playerController) citySelectedMode() {
 	key := cw.ReadKey()
 	if key == "ESCAPE" || key == "ENTER" {
 		pc.resetMode()
+	}
+	if key == "b" {
+		pc.currMode = PCMODE_SELECTING_BLDPROD
+	}
+	if key == "u" {
+
+	}
+}
+
+func (pc *playerController) selectCityBuilding() {
+	key := cw.ReadKey()
+	if key == "ESCAPE" || key == "ENTER" {
+		pc.currMode = PCMODE_CITY_SELECTED
+	} else {
+		buildables := pc.selectedCity.getListOfBuildablesHere()
+		index := strings.SelectIndexFromStringsByHash(func(x int) string { return buildables[x].name }, len(buildables), key)
+		if index != -1 {
+			pc.selectedCity.currentProductionOrder = buildables[index]
+			pc.currMode = PCMODE_CITY_SELECTED
+		}
 	}
 }
 

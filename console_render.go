@@ -59,9 +59,6 @@ func (rs *asciiRenderer) renderMainScreen(s *scene, pc *playerController) {
 		rs.renderUnit(u)
 	}
 	rs.renderUI()
-	if rs.pc.currMode == PCMODE_CITY_SELECTED {
-		rs.showCityScreen()
-	}
 	cw.FlushScreen()
 }
 

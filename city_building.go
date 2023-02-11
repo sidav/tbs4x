@@ -7,17 +7,27 @@ import (
 type cityBuildingStatic struct {
 	name string
 
-	productionCost int
-	moneyCost      int
+	unbuildable      bool
+	productionCost   int
+	producedWithType int
+	moneyCost        int
 
 	size                    int
 	requiresBuildingsInCity []string
 
-	buildPower int
+	prodPowers []productionAbility
 }
 
 func (cb *cityBuildingStatic) getCosts() (int, int) {
 	return cb.productionCost, cb.moneyCost
+}
+
+func (cb *cityBuildingStatic) getProductionTypeRequired() int {
+	return cb.producedWithType
+}
+
+func (cb *cityBuildingStatic) getName() string {
+	return cb.name
 }
 
 func findBuildingInTableByName(name string) *cityBuildingStatic {
@@ -35,27 +45,36 @@ func findBuildingInTableByName(name string) *cityBuildingStatic {
 
 var sTableBuildings = []*cityBuildingStatic{
 	{
-		name:           "Frontal HQ",
-		productionCost: 0,
-		moneyCost:      0,
-		size:           5,
+		name:        "Frontal HQ",
+		unbuildable: true,
+		size:        5,
+		prodPowers: []productionAbility{{
+			prodCode:  PRODUCTION_BUILDING,
+			prodPower: 5,
+		}},
 	},
 	{
 		name:           "Construction Yard",
 		productionCost: 0,
 		moneyCost:      0,
 		size:           4,
+		prodPowers: []productionAbility{{
+			prodCode:  PRODUCTION_BUILDING,
+			prodPower: 2,
+		}},
 	},
 	{
-		name:           "Barracks",
-		productionCost: 25,
-		moneyCost:      20,
-		size:           2,
+		name:             "Barracks",
+		productionCost:   25,
+		moneyCost:        20,
+		size:             2,
+		producedWithType: PRODUCTION_BUILDING,
 	},
 	{
-		name:           "Refinery",
-		productionCost: 50,
-		moneyCost:      30,
-		size:           3,
+		name:             "Refinery",
+		productionCost:   50,
+		moneyCost:        30,
+		size:             3,
+		producedWithType: PRODUCTION_BUILDING,
 	},
 }

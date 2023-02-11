@@ -3,6 +3,7 @@ package main
 import "tbs4x/lib/perlin_noise"
 
 func (s *scene) init(w, h int) {
+	s.currentTurn = 1
 	// Perlin noise generation
 	noiseMap := perlin_noise.GeneratePerlinNoiseMap(w, h, 16, 8, rnd)
 	perlin_noise.MakeNoiseRectangular(noiseMap)

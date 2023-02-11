@@ -7,10 +7,17 @@ import (
 
 func (rs *asciiRenderer) renderUI() {
 	rs.renderCursor()
-	rs.drawCenteredStringAndIncrementLine("Turn 1", rs.uiPanelCenterX)
+	rs.drawCenteredStringAndIncrementLine(fmt.Sprintf("Turn %d", rs.sc.currentTurn), rs.uiPanelCenterX)
 	rs.drawCenteredStringAndIncrementLine(fmt.Sprintf("(%d, %d)", rs.pc.cursorX, rs.pc.cursorY), rs.uiPanelCenterX)
 	rs.currUiLine++
 	rs.renderUnderCursorInfo()
+
+	switch rs.pc.currMode {
+	case PCMODE_CITY_SELECTED:
+		rs.showCityScreen()
+	case PCMODE_SELECTING_BLDPROD:
+		rs.showAvailableBuildingsToMake()
+	}
 }
 
 func (rs *asciiRenderer) renderUnderCursorInfo() {
