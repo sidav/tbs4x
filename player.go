@@ -1,9 +1,10 @@
 package main
 
 type player struct {
-	endedThisTurn bool
-	exploredTiles [][]bool
-	seenTiles     [][]bool
+	endedThisTurn         bool
+	exploredTiles         [][]bool
+	seenTiles             [][]bool
+	notificationsThisTurn []string
 }
 
 func (p *player) init(mapW, mapH int) {
@@ -15,6 +16,18 @@ func (p *player) init(mapW, mapH int) {
 	for i := range p.seenTiles {
 		p.seenTiles[i] = make([]bool, mapH)
 	}
+}
+
+func (p *player) hasNotifications() bool {
+	return len(p.notificationsThisTurn) > 0
+}
+
+func (p *player) clearNotifications() {
+	p.notificationsThisTurn = p.notificationsThisTurn[:0]
+}
+
+func (p *player) addNotification(n string) {
+	p.notificationsThisTurn = append(p.notificationsThisTurn, n)
 }
 
 func (p *player) resetVision() {

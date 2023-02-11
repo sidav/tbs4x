@@ -19,6 +19,8 @@ func (rs *asciiRenderer) renderUI() {
 		rs.showAvailableBuildingsToMake()
 	case PCMODE_SELECTING_UNTPROD:
 		rs.showAvailableUnitsToMake()
+	case PCMODE_VIEW_NOTIFICATIONS:
+		rs.showNotificationsScreen()
 	}
 }
 
@@ -74,6 +76,22 @@ func (rs *asciiRenderer) renderCursor() {
 		cw.PutChar('^', sx+rs.tileW-2, sy-1)
 		cw.PutChar('v', sx+1, sy+rs.tileH)
 		cw.PutChar('v', sx+rs.tileW-2, sy+rs.tileH)
+	}
+}
+
+func (rs *asciiRenderer) showNotificationsScreen() {
+	if !rs.pc.controlsPlayer.hasNotifications() {
+		return
+	}
+	cw.ResetStyle()
+	cw.DrawFilledRect(' ', 0, 0, rs.consW-rs.uiPanelW, rs.consH-1)
+	cw.SetStyle(tcell.ColorWhite, tcell.ColorBlue)
+	cw.DrawRect(0, 0, rs.consW-rs.uiPanelW, rs.consH-1)
+	cw.SetStyle(tcell.ColorBlue, tcell.ColorBlack)
+	cw.PutStringCenteredAt(" NOTIFICATIONS ", (rs.consW-rs.uiPanelW)/2, 0)
+	rs.currUiLine = 2
+	for _, s := range rs.pc.controlsPlayer.notificationsThisTurn {
+		rs.drawStringAndIncrementLine(s, 2)
 	}
 }
 

@@ -21,16 +21,19 @@ func (pc *playerController) resetMode() {
 }
 
 const (
-	PCMODE_NORMAL            = "Normal"
-	PCMODE_UNITS_SELECTED    = "Unit selected"
-	PCMODE_CITY_SELECTED     = "City selected"
-	PCMODE_SELECTING_BLDPROD = "Building"
-	PCMODE_SELECTING_UNTPROD = "Producing"
+	PCMODE_VIEW_NOTIFICATIONS = "Viewing notifications"
+	PCMODE_NORMAL             = "Normal"
+	PCMODE_UNITS_SELECTED     = "Unit selected"
+	PCMODE_CITY_SELECTED      = "City selected"
+	PCMODE_SELECTING_BLDPROD  = "Building"
+	PCMODE_SELECTING_UNTPROD  = "Producing"
 )
 
 func (pc *playerController) playerControl(s *scene) {
 	pc.s = s
 	switch pc.currMode {
+	case PCMODE_VIEW_NOTIFICATIONS:
+		pc.viewNotifications()
 	case PCMODE_NORMAL:
 		pc.normalMode()
 	case PCMODE_UNITS_SELECTED:
@@ -85,6 +88,17 @@ func (pc *playerController) unitsSelectedMode() {
 		if pc.s.tryImmediateMoveUnits(pc.selectedUnits, vx, vy) {
 			pc.setCursorAt(pc.selectedUnits[0].getCoords())
 		}
+	}
+}
+
+func (pc *playerController) viewNotifications() {
+	if !pc.controlsPlayer.hasNotifications() {
+		pc.resetMode()
+		return
+	}
+	key := cw.ReadKey()
+	if key == "ESCAPE" || key == "ENTER" {
+		pc.resetMode()
 	}
 }
 
