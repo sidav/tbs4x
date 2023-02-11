@@ -27,7 +27,9 @@ func (r *asciiRenderer) showCityScreen() {
 	}
 	prodLine := "none"
 	if city.currentProductionOrder != nil {
-		prodLine = getProductionTypeString(city.currentProductionOrder.getProductionTypeRequired()) + " " + city.currentProductionOrder.getName()
+		prodLine = fmt.Sprintf("%s %s (ETA %d turns)",
+			getProductionTypeString(city.currentProductionOrder.getProductionTypeRequired()),
+			city.currentProductionOrder.getName(), city.getETAForCurrentProduction())
 	}
 	lines = append(lines,
 		"",
@@ -64,7 +66,7 @@ func (r *asciiRenderer) showAvailableBuildingsToMake() {
 	for i, b := range buildable {
 		lines = append(lines,
 			fmt.Sprintf("%s - %s", hashes[i], b.name),
-			fmt.Sprintf(" $%d, size %d", b.moneyCost, b.size),
+			fmt.Sprintf(" $%d, size %d, ETA %d turns", b.moneyCost, b.size, city.getETAForProducing(b)),
 		)
 	}
 
@@ -95,7 +97,7 @@ func (r *asciiRenderer) showAvailableUnitsToMake() {
 	for i, b := range buildable {
 		lines = append(lines,
 			fmt.Sprintf("%s - %s", hashes[i], b.name),
-			fmt.Sprintf(" $%d", b.getMoneyCost()),
+			fmt.Sprintf(" $%d, ETA %d turns", b.getMoneyCost(), city.getETAForProducing(b)),
 		)
 	}
 

@@ -7,8 +7,8 @@ type city struct {
 	maxBuildings  int
 	buildingsHere []*cityBuildingStatic
 
-	currentProductionOrder       producible
-	currentAccumulatedProduction int
+	currentProductionOrder producible
+	accumulatedProduction  int
 }
 
 func (c *city) addBuilding(s *cityBuildingStatic) {
@@ -33,6 +33,25 @@ func (c *city) getTotalProductionPowerForType(ptype int) int {
 		}
 	}
 	return prod
+}
+
+func (c *city) getETAForProducing(p producible) int {
+	prodForType := c.getTotalProductionPowerForType(p.getProductionTypeRequired())
+	if prodForType == 0 {
+		return 999
+	}
+	eta := (p.getProductionCost() - c.accumulatedProduction) / prodForType
+	if eta == 0 || (p.getProductionCost()-c.accumulatedProduction)%prodForType > 0 {
+		eta++
+	}
+	return eta
+}
+
+func (c *city) getETAForCurrentProduction() int {
+	if c.currentProductionOrder == nil {
+		return 0
+	}
+	return c.getETAForProducing(c.currentProductionOrder)
 }
 
 func (c *city) getListOfBuildablesHere() []*cityBuildingStatic {
