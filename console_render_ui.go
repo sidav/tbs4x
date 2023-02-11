@@ -17,6 +17,8 @@ func (rs *asciiRenderer) renderUI() {
 		rs.showCityScreen()
 	case PCMODE_SELECTING_BLDPROD:
 		rs.showAvailableBuildingsToMake()
+	case PCMODE_SELECTING_UNTPROD:
+		rs.showAvailableUnitsToMake()
 	}
 }
 

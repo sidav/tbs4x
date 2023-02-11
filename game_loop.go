@@ -10,6 +10,10 @@ func gameLoop() {
 	pc.setCursorAt(s.cities[0].x, s.cities[0].y)
 	for GAME_RUNS {
 		for _, currPlayer := range s.players {
+			// perform all production
+			for _, c := range s.cities {
+				s.performProductionForCity(c)
+			}
 			// beginning of turn cleanup
 			currPlayer.endedThisTurn = false
 			for i := range s.units {

@@ -18,8 +18,12 @@ type cityBuildingStatic struct {
 	prodPowers []productionAbility
 }
 
-func (cb *cityBuildingStatic) getCosts() (int, int) {
-	return cb.productionCost, cb.moneyCost
+func (cb *cityBuildingStatic) getProductionCost() int {
+	return cb.productionCost
+}
+
+func (cb *cityBuildingStatic) getMoneyCost() int {
+	return cb.moneyCost
 }
 
 func (cb *cityBuildingStatic) getProductionTypeRequired() int {
@@ -69,6 +73,10 @@ var sTableBuildings = []*cityBuildingStatic{
 		moneyCost:        20,
 		size:             2,
 		producedWithType: PRODUCTION_BUILDING,
+		prodPowers: []productionAbility{{
+			prodCode:  PRODUCTION_INFANTRY,
+			prodPower: 1,
+		}},
 	},
 	{
 		name:             "Refinery",
@@ -76,5 +84,16 @@ var sTableBuildings = []*cityBuildingStatic{
 		moneyCost:        30,
 		size:             3,
 		producedWithType: PRODUCTION_BUILDING,
+	},
+	{
+		name:             "Factory",
+		productionCost:   50,
+		moneyCost:        40,
+		size:             4,
+		producedWithType: PRODUCTION_BUILDING,
+		prodPowers: []productionAbility{{
+			prodCode:  PRODUCTION_GROUND_MECH,
+			prodPower: 1,
+		}},
 	},
 }

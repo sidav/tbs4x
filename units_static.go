@@ -11,14 +11,27 @@ type unitStaticData struct {
 }
 
 type unitStaticGeoscapeStats struct {
-	speed          int
-	vision         int
-	productionCost int
-	moneyCost      int
+	speed            int
+	vision           int
+	productionCost   int
+	producedWithType int
+	moneyCost        int
 }
 
-func (u *unitStaticData) getCosts() (int, int) {
-	return u.geoscapeStats.productionCost, u.geoscapeStats.moneyCost
+func (ud *unitStaticData) getProductionCost() int {
+	return ud.geoscapeStats.productionCost
+}
+
+func (ud *unitStaticData) getMoneyCost() int {
+	return ud.geoscapeStats.moneyCost
+}
+
+func (ud *unitStaticData) getProductionTypeRequired() int {
+	return ud.geoscapeStats.producedWithType
+}
+
+func (ud *unitStaticData) getName() string {
+	return ud.name
 }
 
 func findUnitStaticIndexByName(name string) int {
@@ -42,6 +55,23 @@ var sTableUnits = []*unitStaticData{
 		geoscapeStats: unitStaticGeoscapeStats{
 			speed:  2,
 			vision: 2,
+
+			productionCost:   10,
+			producedWithType: PRODUCTION_GROUND_MECH,
+			moneyCost:        10,
+		},
+	},
+	{
+		name:            "GI Squad",
+		figuresInUnit:   5,
+		healthPerFigure: 2,
+		geoscapeStats: unitStaticGeoscapeStats{
+			speed:  1,
+			vision: 1,
+
+			productionCost:   10,
+			producedWithType: PRODUCTION_INFANTRY,
+			moneyCost:        10,
 		},
 	},
 }

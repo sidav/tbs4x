@@ -38,7 +38,9 @@ func (pc *playerController) playerControl(s *scene) {
 	case PCMODE_CITY_SELECTED:
 		pc.citySelectedMode()
 	case PCMODE_SELECTING_BLDPROD:
-		pc.selectCityBuilding()
+		pc.selectBuildingToMake()
+	case PCMODE_SELECTING_UNTPROD:
+		pc.selectUnitToMake()
 	default:
 		panic("No func for mode " + pc.currMode)
 	}
@@ -95,16 +97,30 @@ func (pc *playerController) citySelectedMode() {
 		pc.currMode = PCMODE_SELECTING_BLDPROD
 	}
 	if key == "u" {
-
+		pc.currMode = PCMODE_SELECTING_UNTPROD
 	}
 }
 
-func (pc *playerController) selectCityBuilding() {
+func (pc *playerController) selectBuildingToMake() {
 	key := cw.ReadKey()
 	if key == "ESCAPE" || key == "ENTER" {
 		pc.currMode = PCMODE_CITY_SELECTED
 	} else {
 		buildables := pc.selectedCity.getListOfBuildablesHere()
+		index := strings.SelectIndexFromStringsByHash(func(x int) string { return buildables[x].name }, len(buildables), key)
+		if index != -1 {
+			pc.selectedCity.currentProductionOrder = buildables[index]
+			pc.currMode = PCMODE_CITY_SELECTED
+		}
+	}
+}
+
+func (pc *playerController) selectUnitToMake() {
+	key := cw.ReadKey()
+	if key == "ESCAPE" || key == "ENTER" {
+		pc.currMode = PCMODE_CITY_SELECTED
+	} else {
+		buildables := pc.selectedCity.getListOfProducibleUnitsHere()
 		index := strings.SelectIndexFromStringsByHash(func(x int) string { return buildables[x].name }, len(buildables), key)
 		if index != -1 {
 			pc.selectedCity.currentProductionOrder = buildables[index]

@@ -23,6 +23,18 @@ func (c *city) countUsedSpace() int {
 	return space
 }
 
+func (c *city) getTotalProductionPowerForType(ptype int) int {
+	prod := 0
+	for _, b := range c.buildingsHere {
+		for _, pr := range b.prodPowers {
+			if pr.prodCode == ptype {
+				prod += pr.prodPower
+			}
+		}
+	}
+	return prod
+}
+
 func (c *city) getListOfBuildablesHere() []*cityBuildingStatic {
 	arr := make([]*cityBuildingStatic, 0)
 	for _, b := range sTableBuildings {
@@ -30,6 +42,16 @@ func (c *city) getListOfBuildablesHere() []*cityBuildingStatic {
 			continue
 		}
 		arr = append(arr, b)
+	}
+	return arr
+}
+
+func (c *city) getListOfProducibleUnitsHere() []*unitStaticData {
+	arr := make([]*unitStaticData, 0)
+	for _, u := range sTableUnits {
+		if c.getTotalProductionPowerForType(u.geoscapeStats.producedWithType) > 0 {
+			arr = append(arr, u)
+		}
 	}
 	return arr
 }
