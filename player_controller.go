@@ -27,6 +27,7 @@ const (
 	PCMODE_CITY_SELECTED      = "City selected"
 	PCMODE_SELECTING_BLDPROD  = "Building"
 	PCMODE_SELECTING_UNTPROD  = "Producing"
+	PCMODE_SELECT_UNIT_ORDER  = "unit order"
 )
 
 func (pc *playerController) playerControl(s *scene) {
@@ -139,6 +140,18 @@ func (pc *playerController) selectUnitToMake() {
 		if index != -1 {
 			pc.selectedCity.currentProductionOrder = buildables[index]
 			pc.currMode = PCMODE_CITY_SELECTED
+		}
+	}
+}
+
+func (pc *playerController) selectUnitOrder() {
+	key := cw.ReadKey()
+	if key == "ESCAPE" || key == "ENTER" {
+		pc.resetMode()
+	} else {
+		index := strings.SelectIndexFromStringsByHash(func(x int) string { return getNameOfOrder(x) }, ORDERS_COUNT, key)
+		if index != -1 {
+			pc.resetMode()
 		}
 	}
 }

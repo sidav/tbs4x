@@ -5,6 +5,8 @@ type unit struct {
 	id                      int
 	x, y                    int
 	movementPointsRemaining int
+
+	currentOrder unitOrder
 }
 
 func (u *unit) initByStatic() {
@@ -17,4 +19,13 @@ func (u *unit) getCoords() (int, int) {
 
 func (u *unit) getStaticData() *unitStaticData {
 	return sTableUnits[u.id]
+}
+
+func (u *unit) canPerformOrder(code int) bool {
+	switch code {
+	case ORDER_NONE, ORDER_MOVE:
+		return true
+	default:
+		return false
+	}
 }
