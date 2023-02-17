@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gdamore/tcell/v2"
+	"tbs4x/lib/strings"
 )
 
 func (rs *asciiRenderer) renderUI() {
@@ -42,12 +43,27 @@ func (rs *asciiRenderer) renderUnderCursorInfo() {
 	if len(unitsHere) > 0 {
 		rs.drawCenteredStringAndIncrementLine(fmt.Sprintf("Squad: %d MP", arrayOfUnits(unitsHere).getMinMovementPoints()),
 			rs.uiPanelCenterX)
+		if unitsHere[0].currentOrder != nil {
+			rs.drawCenteredStringAndIncrementLine(fmt.Sprintf("Order: %s to (%d, %d)",
+				getNameOfOrder(unitsHere[0].currentOrder.orderCode), unitsHere[0].currentOrder.x, unitsHere[0].currentOrder.y),
+				rs.uiPanelCenterX)
+		}
 	}
 	for i, u := range unitsHere {
 		cw.SetFg(tcell.ColorWhite)
 		rs.drawCenteredStringAndIncrementLine(fmt.Sprintf("%d. %s", i+1, u.getStaticData().name),
 			rs.uiPanelCenterX)
 
+	}
+
+	if rs.pc.currMode == PCMODE_UNITS_SELECTED {
+		orderHashes := strings.HashStringsToShortestDistincts(func(x int) string { return getNameOfOrder(x) }, ORDERS_COUNT)
+		for o := 0; o < ORDERS_COUNT; o++ {
+			if rs.pc.getSelectedUnits().canGroupPerformOrder(o) {
+				cw.SetFg(tcell.ColorWhite)
+				rs.drawStringAndIncrementLine(fmt.Sprintf("%s - %s", orderHashes[o], getNameOfOrder(o)), rs.uiPanelCenterX-rs.uiPanelW/2)
+			}
+		}
 	}
 }
 

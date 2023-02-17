@@ -20,6 +20,10 @@ func (pc *playerController) resetMode() {
 	pc.currMode = PCMODE_NORMAL
 }
 
+func (pc *playerController) getSelectedUnits() arrayOfUnits {
+	return arrayOfUnits(pc.selectedUnits)
+}
+
 const (
 	PCMODE_VIEW_NOTIFICATIONS = "Viewing notifications"
 	PCMODE_NORMAL             = "Normal"
@@ -82,14 +86,27 @@ func (pc *playerController) unitsSelectedMode() {
 	key := cw.ReadKeyAsync(10)
 	switch key {
 	case "ESCAPE", "ENTER":
+		if pc.getSelectedUnits().canGroupPerformOrder(ORDER_MOVE) {
+			pc.getSelectedUnits().assignOrder(&unitOrder{
+				orderCode: ORDER_MOVE,
+				x:         pc.cursorX,
+				y:         pc.cursorY,
+			})
+		}
 		pc.resetMode()
 	}
-	vx, vy := pc.keyToDirection(key)
-	if vx != 0 || vy != 0 {
-		if pc.s.tryImmediateMoveUnits(pc.selectedUnits, vx, vy) {
-			pc.setCursorAt(pc.selectedUnits[0].getCoords())
-		}
+	if pc.selectUnitOrderByKeypress(key) {
+		pc.resetMode()
+		return
 	}
+	vx, vy := pc.keyToDirection(key)
+	pc.cursorX += vx
+	pc.cursorY += vy
+	//if vx != 0 || vy != 0 {
+	//	if pc.s.tryImmediateMoveUnits(pc.selectedUnits, vx, vy) {
+	//		pc.setCursorAt(pc.selectedUnits[0].getCoords())
+	//	}
+	//}
 }
 
 func (pc *playerController) viewNotifications() {
@@ -144,16 +161,19 @@ func (pc *playerController) selectUnitToMake() {
 	}
 }
 
-func (pc *playerController) selectUnitOrder() {
-	key := cw.ReadKey()
-	if key == "ESCAPE" || key == "ENTER" {
-		pc.resetMode()
-	} else {
-		index := strings.SelectIndexFromStringsByHash(func(x int) string { return getNameOfOrder(x) }, ORDERS_COUNT, key)
-		if index != -1 {
-			pc.resetMode()
+func (pc *playerController) selectUnitOrderByKeypress(key string) bool {
+	index := strings.SelectIndexFromStringsByHash(func(x int) string { return getNameOfOrder(x) }, ORDERS_COUNT, key)
+	if index != -1 {
+		if pc.getSelectedUnits().canGroupPerformOrder(index) {
+			pc.getSelectedUnits().assignOrder(&unitOrder{
+				orderCode: index,
+				x:         pc.cursorX,
+				y:         pc.cursorY,
+			})
+			return true
 		}
 	}
+	return false
 }
 
 func (pc *playerController) setCursorAt(x, y int) {

@@ -30,6 +30,7 @@ const (
 type tileStaticData struct {
 	possibleResources []int
 	allowsBuilding    bool
+	isNaval           bool
 }
 
 func (tsd *tileStaticData) canHaveResource(code int) bool {
@@ -51,6 +52,7 @@ var sTableTiles = map[int]*tileStaticData{
 	},
 	TILE_WATER: {
 		allowsBuilding: false,
+		isNaval:        true,
 	},
 	TILE_GRASS: {
 		possibleResources: []int{RES_GOLD},

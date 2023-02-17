@@ -19,6 +19,18 @@ func (units arrayOfUnits) moveAllByVector(vx, vy int) {
 	}
 }
 
+func (units arrayOfUnits) resetOrder() {
+	for _, u := range units {
+		u.currentOrder = nil
+	}
+}
+
+func (units arrayOfUnits) emptyActionPoints() {
+	for _, u := range units {
+		u.movementPointsRemaining = 0
+	}
+}
+
 func (units arrayOfUnits) spendMovementPoints(pts int) {
 	for _, u := range units {
 		u.movementPointsRemaining -= pts
@@ -42,6 +54,12 @@ func (units arrayOfUnits) canGroupPerformOrder(code int) bool {
 		}
 	}
 	return false
+}
+
+func (units arrayOfUnits) assignOrder(o *unitOrder) {
+	for _, u := range units {
+		u.currentOrder = o
+	}
 }
 
 //func (units arrayOfUnits) getAvailableOrderCodes() []int {

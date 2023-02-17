@@ -5,6 +5,10 @@ type unitOrder struct {
 	x, y      int
 }
 
+func (o *unitOrder) getCoords() (int, int) {
+	return o.x, o.y
+}
+
 const (
 	ORDER_NONE = iota
 	ORDER_MOVE

@@ -26,6 +26,7 @@ func gameLoop() {
 			for !currPlayer.endedThisTurn && GAME_RUNS {
 				rend.renderMainScreen(s, pc)
 				pc.playerControl(s)
+				s.performOrdersForUnits()
 			}
 			pc.controlsPlayer.clearNotifications()
 			s.currentTurn++

@@ -1,11 +1,14 @@
 package main
 
+import "tbs4x/lib/pathfinding/astar"
+
 type scene struct {
 	currentTurn int
 	players     []*player
 	cities      []*city
 	units       []*unit
 	tiles       [][]*tile
+	pathfinder  *astar.AStarPathfinder
 }
 
 func (s *scene) areCoordsValid(x, y int) bool {
@@ -33,7 +36,7 @@ func (s *scene) addUnit(u *unit) {
 	s.units = append(s.units, u)
 }
 
-func (s *scene) getAllUnitsAt(x, y int) []*unit {
+func (s *scene) getAllUnitsAt(x, y int) arrayOfUnits {
 	list := make([]*unit, 0)
 	for _, u := range s.units {
 		if u.x == x && u.y == y {
@@ -71,4 +74,26 @@ func (s *scene) countTilesAllowingBuildingAround(x, y, dist int) int {
 		}
 	}
 	return count
+}
+
+func (s *scene) getVectorForPathFromTo(fx, fy, tx, ty int) (int, int) {
+	if s.pathfinder == nil {
+		s.pathfinder = &astar.AStarPathfinder{
+			DiagonalMoveAllowed:       true,
+			ForceGetPath:              true,
+			ForceIncludeFinish:        true,
+			AutoAdjustDefaultMaxSteps: false,
+			MapWidth:                  len(s.tiles),
+			MapHeight:                 len(s.tiles[0]),
+		}
+	}
+	path := s.pathfinder.FindPath(func(x, y int) int {
+		if s.tiles[x][y].getStaticData().isNaval {
+			return -1
+		} else {
+			return 0
+		}
+	},
+		fx, fy, tx, ty)
+	return path.GetNextStepVector()
 }

@@ -6,7 +6,7 @@ type unit struct {
 	x, y                    int
 	movementPointsRemaining int
 
-	currentOrder unitOrder
+	currentOrder *unitOrder
 }
 
 func (u *unit) initByStatic() {
