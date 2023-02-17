@@ -15,7 +15,8 @@ type cityBuildingStatic struct {
 	size                    int
 	requiresBuildingsInCity []string
 
-	prodPowers []productionAbility
+	acceptsHarvesters bool
+	prodPowers        []productionAbility
 }
 
 func (cb *cityBuildingStatic) getProductionCost() int {
@@ -78,10 +79,11 @@ var sTableBuildings = []*cityBuildingStatic{
 		}},
 	},
 	{
-		name:           "Refinery",
-		productionCost: 50,
-		moneyCost:      30,
-		size:           3,
+		name:              "Refinery",
+		productionCost:    50,
+		moneyCost:         30,
+		size:              3,
+		acceptsHarvesters: true,
 	},
 	{
 		name:           "Factory",

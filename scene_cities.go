@@ -13,14 +13,7 @@ func (s *scene) performProductionForCity(c *city) {
 			c.addBuilding(b)
 		}
 		if u, ok := c.currentProductionOrder.(*unitStaticData); ok {
-			newUnt := &unit{
-				owner: c.owner,
-				id:    findUnitStaticIndexByName(u.name),
-				x:     c.x,
-				y:     c.y + 1,
-			}
-			newUnt.initByStatic()
-			s.addUnit(newUnt)
+			s.addUnit(findUnitStaticIndexByName(u.name), c.owner, c.x, c.y+1)
 		}
 		c.owner.addNotification(fmt.Sprintf("%s finished %s %s",
 			c.name,

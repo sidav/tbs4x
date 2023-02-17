@@ -6,6 +6,8 @@ type unit struct {
 	x, y                    int
 	movementPointsRemaining int
 
+	currentHarvested int
+
 	currentOrder *unitOrder
 }
 
@@ -21,10 +23,20 @@ func (u *unit) getStaticData() *unitStaticData {
 	return sTableUnits[u.id]
 }
 
+func (u *unit) canHarvest() bool {
+	return u.getStaticData().geoscapeStats.resourceCapacity > 0
+}
+
+func (u *unit) remainingResourceCapacity() int {
+	return u.getStaticData().geoscapeStats.resourceCapacity - u.currentHarvested
+}
+
 func (u *unit) canPerformOrder(code int) bool {
 	switch code {
 	case ORDER_NONE, ORDER_MOVE:
 		return true
+	case ORDER_HARVEST:
+		return u.canHarvest()
 	default:
 		return false
 	}

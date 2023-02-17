@@ -8,7 +8,9 @@ import (
 
 func (rs *asciiRenderer) renderUI() {
 	rs.renderCursor()
+	cw.SetFg(tcell.ColorGray)
 	rs.drawCenteredStringAndIncrementLine(fmt.Sprintf("Turn %d", rs.sc.currentTurn), rs.uiPanelCenterX)
+	rs.drawCenteredStringAndIncrementLine(fmt.Sprintf("$%d", rs.pc.controlsPlayer.currentMoney), rs.uiPanelCenterX)
 	rs.drawCenteredStringAndIncrementLine(fmt.Sprintf("(%d, %d)", rs.pc.cursorX, rs.pc.cursorY), rs.uiPanelCenterX)
 	rs.currUiLine++
 	rs.renderUnderCursorInfo()

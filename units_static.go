@@ -16,6 +16,7 @@ type unitStaticGeoscapeStats struct {
 	productionCost   int
 	producedWithType int
 	moneyCost        int
+	resourceCapacity int
 }
 
 func (ud *unitStaticData) getProductionCost() int {
@@ -59,6 +60,21 @@ var sTableUnits = []*unitStaticData{
 			productionCost:   10,
 			producedWithType: PRODUCTION_GROUND_MECH,
 			moneyCost:        10,
+		},
+	},
+	{
+		name:            "Harvester",
+		figuresInUnit:   1,
+		healthPerFigure: 10,
+		geoscapeStats: unitStaticGeoscapeStats{
+			speed:  1,
+			vision: 1,
+
+			productionCost:   10,
+			producedWithType: PRODUCTION_GROUND_MECH,
+			moneyCost:        25,
+
+			resourceCapacity: 20,
 		},
 	},
 	{

@@ -21,7 +21,7 @@ func intAbs(x int) int {
 	return x
 }
 
-func maxInt(args ...int) int {
+func MaxInt(args ...int) int {
 	currMax := 0
 	for i, arg := range args {
 		if i == 0 || arg > currMax {
@@ -31,7 +31,7 @@ func maxInt(args ...int) int {
 	return currMax
 }
 
-func minInt(args ...int) int {
+func MinInt(args ...int) int {
 	currMin := 0
 	for i, arg := range args {
 		if i == 0 || arg < currMin {
@@ -135,10 +135,10 @@ func IsVectorDegreeEqualTo(vx, vy float64, deg int) bool {
 
 // Works when coords are INSIDE the rect, too.
 func GetSqDistFromCoordsToRectangleBorder(x, y, rx, ry, w, h int) int {
-	//dx := maxInt(rx - x, 0, x - (rx+w-1))
-	//dy := maxInt(ry - y, 0, y - (ry+h-1))
-	dx := maxInt(rx-x, x-(rx+w-1))
-	dy := maxInt(ry-y, y-(ry+h-1))
+	//dx := MaxInt(rx - x, 0, x - (rx+w-1))
+	//dy := MaxInt(ry - y, 0, y - (ry+h-1))
+	dx := MaxInt(rx-x, x-(rx+w-1))
+	dy := MaxInt(ry-y, y-(ry+h-1))
 	return dx*dx + dy*dy
 }
 

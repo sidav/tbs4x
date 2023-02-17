@@ -5,6 +5,8 @@ type player struct {
 	exploredTiles         [][]bool
 	seenTiles             [][]bool
 	notificationsThisTurn []string
+
+	currentMoney int
 }
 
 func (p *player) init(mapW, mapH int) {

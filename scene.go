@@ -1,6 +1,9 @@
 package main
 
-import "tbs4x/lib/pathfinding/astar"
+import (
+	"tbs4x/lib/calculations"
+	"tbs4x/lib/pathfinding/astar"
+)
 
 type scene struct {
 	currentTurn int
@@ -32,7 +35,14 @@ func (s *scene) performExploration() {
 	}
 }
 
-func (s *scene) addUnit(u *unit) {
+func (s *scene) addUnit(code int, p *player, x, y int) {
+	u := &unit{
+		owner: p,
+		id:    code,
+		x:     x,
+		y:     y,
+	}
+	u.initByStatic()
 	s.units = append(s.units, u)
 }
 
@@ -57,6 +67,20 @@ func (s *scene) getCityAt(x, y int) *city {
 		}
 	}
 	return nil
+}
+
+func (s *scene) getCityAcceptingHarvestersClosestTo(p *player, x, y int) *city {
+	var currSelected *city
+	for _, c := range s.cities {
+		if c.countHarvesterAcceptors() > 0 &&
+			(currSelected == nil ||
+				calculations.GetApproxDistFromTo(x, y, c.x, c.y) <
+					calculations.GetApproxDistFromTo(x, y, currSelected.x, currSelected.y)) {
+
+			currSelected = c
+		}
+	}
+	return currSelected
 }
 
 func (s *scene) isTileApplicableForCity(x, y int) bool {

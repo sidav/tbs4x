@@ -19,6 +19,24 @@ func (units arrayOfUnits) moveAllByVector(vx, vy int) {
 	}
 }
 
+func (units arrayOfUnits) areSomeHarvestersWithCargo() bool {
+	for _, u := range units {
+		if u.canHarvest() && u.currentHarvested > 0 {
+			return true
+		}
+	}
+	return false
+}
+
+func (units arrayOfUnits) areAllHarvestersFull() bool {
+	for _, u := range units {
+		if u.canHarvest() && u.currentHarvested < u.getStaticData().geoscapeStats.resourceCapacity {
+			return false
+		}
+	}
+	return true
+}
+
 func (units arrayOfUnits) resetOrder() {
 	for _, u := range units {
 		u.currentOrder = nil

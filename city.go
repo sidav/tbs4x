@@ -35,6 +35,16 @@ func (c *city) getTotalProductionPowerForType(ptype int) int {
 	return prod
 }
 
+func (c *city) countHarvesterAcceptors() int {
+	accs := 0
+	for _, b := range c.buildingsHere {
+		if b.acceptsHarvesters {
+			accs++
+		}
+	}
+	return accs
+}
+
 func (c *city) getETAForProducing(p producible) int {
 	prodForType := c.getTotalProductionPowerForType(p.getProductionTypeRequired())
 	if prodForType == 0 {

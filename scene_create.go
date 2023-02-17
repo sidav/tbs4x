@@ -56,23 +56,18 @@ func (s *scene) tryAddPlayer() bool {
 	}
 	startCity.addBuilding(findBuildingInTableByName("hq"))
 	s.addCity(startCity)
-	startUnit := &unit{
-		owner: newPlayer,
-		id:    findUnitStaticIndexByName("recon"),
-		x:     x,
-		y:     y + 1,
-	}
-	startUnit.initByStatic()
-	s.addUnit(startUnit)
+	s.addUnit(findUnitStaticIndexByName("recon"), newPlayer, x+1, y+1)
+	s.addUnit(findUnitStaticIndexByName("harvester"), newPlayer, x, y+1)
 	s.players = append(s.players, newPlayer)
 	return true
 }
 
 func (s *scene) generateResources() {
+	const minInPatch, maxInPatch = 50, 350
 	var desiredTotalRes = map[int]int{
-		RES_NONE:     0,
-		RES_GOLD:     1000,
-		RES_GREENIUM: 1000,
+		RES_NONE: 0,
+		RES_GOLD: 5000,
+		// RES_GREENIUM: 1000,
 	}
 	currTotalRes := make(map[int]int, 0)
 	for res := 1; res <= 2; res++ {
@@ -89,7 +84,7 @@ func (s *scene) generateResources() {
 				}
 			}
 			s.tiles[x][y].resourceCode = res
-			resAmount := rnd.RandInRange(50, 150)
+			resAmount := rnd.RandInRange(minInPatch, maxInPatch)
 			s.tiles[x][y].resourceAmountHere = resAmount
 			currTotalRes[res] += resAmount
 		}
