@@ -50,9 +50,9 @@ func findBuildingInTableByName(name string) *cityBuildingStatic {
 
 var sTableBuildings = []*cityBuildingStatic{
 	{
-		name:        "Frontal HQ",
+		name:        "Landed expedition ship",
 		unbuildable: true,
-		size:        5,
+		size:        7,
 		prodPowers: []productionAbility{{
 			prodCode:  PRODUCTION_BUILDING,
 			prodPower: 5,
