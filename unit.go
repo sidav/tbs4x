@@ -33,7 +33,7 @@ func (u *unit) remainingResourceCapacity() int {
 
 func (u *unit) canPerformOrder(code int) bool {
 	switch code {
-	case ORDER_NONE, ORDER_MOVE:
+	case ORDER_NONE, ORDER_MOVE, ORDER_EXPLORE:
 		return true
 	case ORDER_HARVEST:
 		return u.canHarvest()

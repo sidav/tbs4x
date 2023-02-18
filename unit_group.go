@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type arrayOfUnits []*unit
 
 func (units arrayOfUnits) getCoords() (int, int) {
@@ -10,6 +12,31 @@ func (units arrayOfUnits) getCoords() (int, int) {
 		}
 	}
 	return x, y
+}
+
+func (units arrayOfUnits) getOrder() *unitOrder {
+	order := units[0].currentOrder
+	for _, u := range units {
+		if u.currentOrder != order {
+			panic("Many orders in single group!")
+		}
+	}
+	return order
+}
+
+func (units arrayOfUnits) getOwner() *player {
+	owner := units[0].owner
+	for _, u := range units {
+		if u.owner != owner {
+			panic("Many owners in single group!")
+		}
+	}
+	return owner
+}
+
+func (units arrayOfUnits) notifyOwner(note string) {
+	x, y := units.getCoords()
+	units.getOwner().addNotification(fmt.Sprintf("Squad at %d,%d: %s", x, y, note))
 }
 
 func (units arrayOfUnits) moveAllByVector(vx, vy int) {

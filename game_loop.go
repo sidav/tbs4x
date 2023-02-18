@@ -22,13 +22,13 @@ func gameLoop() {
 				}
 			}
 
-			pc.currMode = PCMODE_VIEW_NOTIFICATIONS
+			pc.resetMode()
 			for !currPlayer.endedThisTurn && GAME_RUNS {
 				rend.renderMainScreen(s, pc)
 				pc.playerControl(s)
 				s.performOrdersForUnits()
 			}
-			pc.controlsPlayer.clearNotifications()
+			// pc.controlsPlayer.clearNotifications()
 			s.currentTurn++
 		}
 

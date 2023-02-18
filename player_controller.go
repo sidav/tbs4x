@@ -17,7 +17,11 @@ func (pc *playerController) getCursorCoords() (int, int) {
 }
 
 func (pc *playerController) resetMode() {
-	pc.currMode = PCMODE_NORMAL
+	if pc.controlsPlayer.hasNotifications() {
+		pc.currMode = PCMODE_VIEW_NOTIFICATIONS
+	} else {
+		pc.currMode = PCMODE_NORMAL
+	}
 }
 
 func (pc *playerController) getSelectedUnits() arrayOfUnits {
@@ -56,6 +60,7 @@ func (pc *playerController) playerControl(s *scene) {
 }
 
 func (pc *playerController) normalMode() {
+	pc.resetMode()
 	key := cw.ReadKeyAsync(10)
 	switch key {
 	case "ESCAPE":
@@ -110,12 +115,9 @@ func (pc *playerController) unitsSelectedMode() {
 }
 
 func (pc *playerController) viewNotifications() {
-	if !pc.controlsPlayer.hasNotifications() {
-		pc.resetMode()
-		return
-	}
 	key := cw.ReadKey()
 	if key == "ESCAPE" || key == "ENTER" {
+		pc.controlsPlayer.clearNotifications()
 		pc.resetMode()
 	}
 }

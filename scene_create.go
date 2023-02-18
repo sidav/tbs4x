@@ -64,10 +64,10 @@ func (s *scene) tryAddPlayer() bool {
 }
 
 func (s *scene) generateResources() {
-	const minInPatch, maxInPatch = 50, 350
+	const minInPatch, maxInPatch = 100, 450
 	var desiredTotalRes = map[int]int{
 		RES_NONE: 0,
-		RES_GOLD: 5000,
+		RES_GOLD: 100,
 		// RES_GREENIUM: 1000,
 	}
 	currTotalRes := make(map[int]int, 0)

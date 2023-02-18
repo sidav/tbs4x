@@ -45,7 +45,7 @@ func (rs *asciiRenderer) renderUnderCursorInfo() {
 	if len(unitsHere) > 0 {
 		rs.drawCenteredStringAndIncrementLine(fmt.Sprintf("Squad: %d MP", arrayOfUnits(unitsHere).getMinMovementPoints()),
 			rs.uiPanelCenterX)
-		if unitsHere[0].currentOrder != nil {
+		if unitsHere.getOrder() != nil {
 			rs.drawCenteredStringAndIncrementLine(fmt.Sprintf("Order: %s to (%d, %d)",
 				getNameOfOrder(unitsHere[0].currentOrder.orderCode), unitsHere[0].currentOrder.x, unitsHere[0].currentOrder.y),
 				rs.uiPanelCenterX)
@@ -101,12 +101,8 @@ func (rs *asciiRenderer) showNotificationsScreen() {
 	if !rs.pc.controlsPlayer.hasNotifications() {
 		return
 	}
+	rs.drawMenuRect("NOTIFICATIONS", 0, 0, rs.consW-rs.uiPanelW, rs.consH-1)
 	cw.ResetStyle()
-	cw.DrawFilledRect(' ', 0, 0, rs.consW-rs.uiPanelW, rs.consH-1)
-	cw.SetStyle(tcell.ColorWhite, tcell.ColorBlue)
-	cw.DrawRect(0, 0, rs.consW-rs.uiPanelW, rs.consH-1)
-	cw.SetStyle(tcell.ColorBlue, tcell.ColorBlack)
-	cw.PutStringCenteredAt(" NOTIFICATIONS ", (rs.consW-rs.uiPanelW)/2, 0)
 	rs.currUiLine = 2
 	for _, s := range rs.pc.controlsPlayer.notificationsThisTurn {
 		rs.drawStringAndIncrementLine(s, 2)

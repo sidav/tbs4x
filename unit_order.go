@@ -14,6 +14,7 @@ const (
 	ORDER_MOVE
 	ORDER_SETTLE
 	ORDER_HARVEST
+	ORDER_EXPLORE
 	ORDERS_COUNT
 )
 
@@ -27,6 +28,8 @@ func getNameOfOrder(code int) string {
 		return "Harvest"
 	case ORDER_SETTLE:
 		return "Settle"
+	case ORDER_EXPLORE:
+		return "Explore"
 	}
 	panic("No order desc for code!")
 }
