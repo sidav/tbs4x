@@ -38,6 +38,7 @@ func (s *scene) init(w, h int) {
 func (s *scene) tryAddPlayer() bool {
 	newPlayer := &player{}
 	newPlayer.init(s.getSize())
+	newPlayer.currentMoney = 100
 	x, y := -1, -1
 	try := 0
 	for !s.isTileApplicableForCity(x, y) {

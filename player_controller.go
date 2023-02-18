@@ -140,8 +140,9 @@ func (pc *playerController) selectBuildingToMake() {
 	} else {
 		buildables := pc.selectedCity.getListOfBuildablesHere()
 		index := strings.SelectIndexFromStringsByHash(func(x int) string { return buildables[x].name }, len(buildables), key)
-		if index != -1 {
+		if index != -1 && buildables[index].moneyCost <= pc.controlsPlayer.currentMoney {
 			pc.selectedCity.currentProductionOrder = buildables[index]
+			pc.controlsPlayer.currentMoney -= buildables[index].moneyCost
 			pc.currMode = PCMODE_CITY_SELECTED
 		}
 	}
@@ -154,8 +155,9 @@ func (pc *playerController) selectUnitToMake() {
 	} else {
 		buildables := pc.selectedCity.getListOfProducibleUnitsHere()
 		index := strings.SelectIndexFromStringsByHash(func(x int) string { return buildables[x].name }, len(buildables), key)
-		if index != -1 {
+		if index != -1 && buildables[index].geoscapeStats.moneyCost <= pc.controlsPlayer.currentMoney {
 			pc.selectedCity.currentProductionOrder = buildables[index]
+			pc.controlsPlayer.currentMoney -= buildables[index].geoscapeStats.moneyCost
 			pc.currMode = PCMODE_CITY_SELECTED
 		}
 	}
